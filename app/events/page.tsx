@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 import { SignedIn, SignedOut, SignInButton, useUser } from '@clerk/nextjs';
 import { supabase } from '@/lib/supabase';
+import Spinner from '@/components/spinner/page';
 
 type Event = {
   id: string;
@@ -26,15 +27,17 @@ const EventList = () => {
   const [events, setEvents] = useState<Event[]>([]);
 
   const userTier = (user?.publicMetadata?.tier as string) || 'free';
-
+  const [loading, setLoading] = useState(true);
   useEffect(() => {
     const fetchEvents = async () => {
+      setLoading(true);
       const { data, error } = await supabase
         .from('events')
         .select('*')
         .order('event_date', { ascending: true });
 
       if (error) {
+        setLoading(false);
         console.error('Error fetching events:', error.message);
         return;
       }
@@ -43,11 +46,14 @@ const EventList = () => {
         (event) => tierRank[event.tier] <= tierRank[userTier]
       );
 
+      setLoading(false)
       setEvents(filtered);
     };
 
     fetchEvents();
   }, [userTier]);
+
+   if (loading) { return <Spinner/>;}
 
   return (
      <div className="lg:py-24 lg:px-32 p-10 bg-gradient-to-r from-indigo-500 to-purple-500">
