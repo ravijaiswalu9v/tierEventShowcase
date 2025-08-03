@@ -42,12 +42,8 @@ const EventList = () => {
         return;
       }
 
-      const filtered = data.filter(
-        (event) => tierRank[event.tier] <= tierRank[userTier]
-      );
-
       setLoading(false)
-      setEvents(filtered);
+      setEvents(data);
     };
 
     fetchEvents();
@@ -56,21 +52,32 @@ const EventList = () => {
    if (loading) { return <Spinner/>;}
 
   return (
-     <div className="lg:py-24 lg:px-32 p-10 bg-gradient-to-r from-indigo-500 to-purple-500">
-      <h1 className="text-3xl font-bold mb-6">Your Events ({userTier})</h1>
+     <div className="lg:py-20 lg:px-32 md:px-16 p-10 bg-gradient-to-r from-black/40 to-purple-600">
+      <h1 className="text-3xl font-bold mb-6 ">Your Events 
+        <span className={`inline-block text-sm font-bold uppercase px-5 py-3 ml-2 rounded-full ${
+                userTier === 'platinum' ? 'bg-purple-600 text-white' :
+                userTier === 'gold' ? 'bg-yellow-500 text-white' :
+                userTier === 'silver' ? 'bg-gray-400 text-white' :
+                'bg-green-500 text-white'
+              }`}>{userTier}
+        </span>
+      </h1>
       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-        {events.map((event) => (
+        {events.map((event) =>{
+        const isLocked = tierRank[event.tier] > tierRank[userTier];
+        
+        return(
           <div
             key={event.id}
-            className="bg-white rounded-lg shadow-md overflow-hidden"
-          >
+            className={`relative bg-white rounded-lg shadow-md overflow-hidden cursor-pointer transition transform duration-300
+              ${isLocked ? 'opacity-70 grayscale pointer-events-none' : 'hover:scale-105 hover:shadow-lg'}`}>
             <img
               src={event.image_url}
               alt={event.title}
               className="w-full h-40 object-cover"
             />
-            <div className="p-4">
-              <h2 className="text-xl font-semibold">{event.title}</h2>
+            <div className="p-4 space-y-2">
+              <h2 className="text-xl font-semibold text-gray-700">{event.title}</h2>
               <p className="text-sm text-gray-500 mb-2">
                 {new Date(event.event_date).toLocaleDateString()}
               </p>
@@ -84,8 +91,16 @@ const EventList = () => {
                 {event.tier}
               </span>
             </div>
+
+            {isLocked && (
+              <div className="absolute inset-0 bg-black/70 text-white flex items-center justify-center text-center px-4">
+                <p className="text-sm sm:text-base font-semibold">
+                  Upgrade to <span className="capitalize">{event.tier}</span> to access this event
+                </p>
+              </div>
+            )}
           </div>
-        ))}
+        )})}
       </div>
     </div>
   );
@@ -95,8 +110,8 @@ export default function EventsPage() {
   return (
     <>
       <SignedOut>
-        <div className="h-[calc(100vh-64px)] lg:py-24 lg:px-32 p-10 bg-gradient-to-r from-indigo-500 to-purple-500 text-center ">
-          <p className="mb-4 text-lg font-medium">Please sign in to view events.</p>
+        <div className="h-[calc(100vh-64px)] lg:py-24 lg:px-32 p-10 bg-gradient-to-r from-black/40 to-purple-600 text-center ">
+          <p className="mb-4 md:text-4xl text-2xl font-medium">Please sign in to view events.</p>
           <SignInButton>
             <button 
             className='bg-[#6c47ff] text-white rounded-full font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 cursor-pointer'>
