@@ -31,7 +31,7 @@ npm run dev
 ```
 
 5. **Live Demo**
-https://tier-event-showcase-nine.vercel.app/events
+https://tier-event-showcase-nine.vercel.app/
 
 
 6. ## 👤 Demo User Credentials
@@ -39,10 +39,10 @@ Use the following test accounts to log in and explore different tiers of event a
 
 | Tier      | Email                  | Password     |
 |-----------|------------------------|--------------|
-| Free      | free@demo.com          | password123  |
-| Silver    | silver@demo.com        | password123  |
-| Gold      | gold@demo.com          | password123  |
-| Platinum  | platinum@demo.com      | password123  |
+| Free      | free@demo.com          | Testuser@clerk25  |
+| Silver    | silver@demo.com        | Testuser@clerk25  |
+| Gold      | gold@demo.com          | Testuser@clerk25  |
+| Platinum  | platinum@demo.com      | Testuser@clerk25  |
 
 
 
